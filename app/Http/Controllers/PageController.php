@@ -100,7 +100,14 @@ class PageController extends Controller
     public function update(Request $request, $id)
     {
         $page = Page::findOrFail($id);
-        $slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+        if($request->slug)
+        {
+            $slug = preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $request->slug));
+        }
+        else
+        {
+            $slug = $page->slug;
+        }
         
         if (Page::where('id','!=', $id)->where('slug', $slug)->first() == null) {
             if($page->type == 'custom_page'){
